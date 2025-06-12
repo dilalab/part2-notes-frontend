@@ -19,6 +19,18 @@ const notes = [
   },
 ]
 
+
+const persons = [
+  {
+    id: 1,
+    name: 'Dilara Bozkurt',
+  },
+  {
+    id: 2,
+    name: 'Ipek Bozkurt',
+  }
+]
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <App notes={notes} />
+  <App notes={notes} persons={persons} />
 )
