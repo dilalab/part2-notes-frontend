@@ -1,6 +1,8 @@
-import ReactDOM from 'react-dom/client'
-import App from './App'
+import ReactDOM from 'react-dom/client';
+import App from './App';
 
+
+  // PART 2.a-b
 const notes = [
   {
     id: 1,
@@ -19,18 +21,22 @@ const notes = [
   },
 ]
 
+// PART 2.c
 
-const persons = [
-  {
-    id: 1,
-    name: 'Dilara Bozkurt',
-  },
-  {
-    id: 2,
-    name: 'Ipek Bozkurt',
-  }
-]
+ReactDOM.createRoot(document.getElementById('root')).render(<App notes={notes}/>)
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <App notes={notes} persons={persons} />
-)
+
+// const persons = [
+//   {
+//     id: 1,
+//     name: 'Dilara Bozkurt',
+//   },
+//   {
+//     id: 2,
+//     name: 'Ipek Bozkurt',
+//   }
+// ]
+
+// ReactDOM.createRoot(document.getElementById('root')).render(
+//   <App notes={notes} persons={persons} />
+// )
