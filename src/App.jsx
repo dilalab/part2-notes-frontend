@@ -19,7 +19,7 @@ const App = () => {
       .then(initialPersons => {
         setPersons(initialPersons)
       })
-    }, [])
+  }, [])
 
 
   const handleNewName = (event) => {
@@ -35,8 +35,8 @@ const App = () => {
     event.preventDefault()
 
 
-  const isNameExists = persons.some(person => person.name === newName)
-  const isNumberExists = persons.some(person => person.number === newNumber)
+    const isNameExists = persons.some(person => person.name === newName)
+    const isNumberExists = persons.some(person => person.number === newNumber)
     if (isNameExists && !isNumberExists) {
       const confirmUpdate = window.confirm(
         newName + ' is already added to the phonebook, do you want to replace it with the new number?'
@@ -63,47 +63,47 @@ const App = () => {
       //   }
       // )
     }
+    else {
+      // const isNumberExists = persons.some(person => person.number === newNumber)
+      //   if (isNameExists == true && isNumberExists == false) {
+      //     alert(persons[id].name + ' is already added to the phonebook, replace the old number with the new one?')
+      //   }
 
-  
-  // const isNumberExists = persons.some(person => person.number === newNumber)
-  //   if (isNameExists == true && isNumberExists == false) {
-  //     alert(persons[id].name + ' is already added to the phonebook, replace the old number with the new one?')
-  //   }
-  
-  const personObject = {
-      name: newName,
-      number: newNumber,
+      const personObject = {
+        name: newName,
+        number: newNumber,
       }
 
-    personsService
-      .create(personObject)
-      .then(response => {
-        setPersons(persons.concat(response))
-        setNewName('')
-        setNewNumber('')
-      })
-    // axios.post('http://localhost:3003/persons', personObject)
-    //   .then(response => {setPersons(persons.concat(response.data))
-    //     setNewName('')
-    //     setNewNumber('')
-    //   })
+      personsService
+        .create(personObject)
+        .then(response => {
+          setPersons(persons.concat(response))
+          setNewName('')
+          setNewNumber('')
+        })
+      // axios.post('http://localhost:3003/persons', personObject)
+      //   .then(response => {setPersons(persons.concat(response.data))
+      //     setNewName('')
+      //     setNewNumber('')
+      //   })
 
-    // personsService.create(personObject).then(
-    //   response => {
-    //     setPersons(persons.concat(response.data))
-    //     setNewName('')
-    //     setNewNumber('')
-    //   }
-    // )
+      // personsService.create(personObject).then(
+      //   response => {
+      //     setPersons(persons.concat(response.data))
+      //     setNewName('')
+      //     setNewNumber('')
+      //   }
+      // )
 
 
-    // const addObjectName = {
-    //   name: newName,
-    //   id: String(persons.length + 1),
-    //   number: newNumber
-    // }
-    // setPersons(persons.concat(addObjectName))
-    // setNewName('')
+      // const addObjectName = {
+      //   name: newName,
+      //   id: String(persons.length + 1),
+      //   number: newNumber
+      // }
+      // setPersons(persons.concat(addObjectName))
+      // setNewName('')
+    }
   }
 
   const deletePerson = (id) => {
@@ -124,22 +124,22 @@ const App = () => {
       <form onSubmit={addName}>
         <div>
           name: <input
-          value={newName}
-          onChange={handleNewName}/>
+            value={newName}
+            onChange={handleNewName} />
           <br />
-          number: <input 
-          value={newNumber} 
-          onChange={handleNewNumber}/>
+          number: <input
+            value={newNumber}
+            onChange={handleNewNumber} />
         </div>
         <div><button type='submit'>add</button></div>
       </form>
       <h2>Numbers</h2>
-        <div>
-          <ul>
-            {persons.map((person) => <li key={person.id}>{person.name} {person.number} 
-              <button type='button' onClick={() => deletePerson(person.id)}>delete</button></li>)}
-          </ul>
-        </div>
+      <div>
+        <ul>
+          {persons.map((person) => <li key={person.id}>{person.name} {person.number}
+            <button type='button' onClick={() => deletePerson(person.id)}>delete</button></li>)}
+        </ul>
+      </div>
     </div>
   )
 }
