@@ -1,12 +1,26 @@
 import { useState } from 'react'
+import { use } from 'react'
+import { useEffect } from 'react'
+import axios from 'axios'
+import personsService from './services/persons.js'
+
 
 // PART 2 EXERCISES
 // 2.6
 
-const App = (props) => {
-  const [persons, setPersons] = useState([{name: 'Arto Hellas'}])
+const App = () => {
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState(Number)
+  const [newNumber, setNewNumber] = useState('')
+
+  useEffect(() => {
+    personsService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
+    }, [])
+
 
   const handleNewName = (event) => {
     setNewName(event.target.value)
@@ -16,22 +30,92 @@ const App = (props) => {
     setNewNumber(event.target.value)
   }
 
+
   const addName = (event) => {
     event.preventDefault()
 
-    const isNameExists = persons.some(person => person.name === newName)
-    if (isNameExists == true) {
-      alert(newName + ' is already added to the phonebook')
-      return
+
+  const isNameExists = persons.some(person => person.name === newName)
+  const isNumberExists = persons.some(person => person.number === newNumber)
+    if (isNameExists && !isNumberExists) {
+      const confirmUpdate = window.confirm(
+        newName + ' is already added to the phonebook, do you want to replace it with the new number?'
+      )
+      if (confirmUpdate) {
+        const existingPerson = persons.find(person => person.name === newName)
+        const updatedPerson = {
+          ...existingPerson, number: newNumber
+        }
+        personsService.update(existingPerson.id, updatedPerson).then(
+          returnedPerson => {
+            setPersons(persons.map(
+              p => p.id !== existingPerson.id ? p : returnedPerson
+            ))
+            setNewName('')
+            setNewNumber('')
+          }
+        )
+      }
+      // alert(newName + ' is already added to the phonebook, do you want to replace it with the new number?')
+      // return personsService.update(personObject).then(
+      //   response => {
+      //     setNewNumber('')
+      //   }
+      // )
     }
 
-    const addObjectName = {
+  
+  // const isNumberExists = persons.some(person => person.number === newNumber)
+  //   if (isNameExists == true && isNumberExists == false) {
+  //     alert(persons[id].name + ' is already added to the phonebook, replace the old number with the new one?')
+  //   }
+  
+  const personObject = {
       name: newName,
-      id: String(persons.length + 1),
-      number: newNumber
-    }
-    setPersons(persons.concat(addObjectName))
-    setNewName('')
+      number: newNumber,
+      }
+
+    personsService
+      .create(personObject)
+      .then(response => {
+        setPersons(persons.concat(response))
+        setNewName('')
+        setNewNumber('')
+      })
+    // axios.post('http://localhost:3003/persons', personObject)
+    //   .then(response => {setPersons(persons.concat(response.data))
+    //     setNewName('')
+    //     setNewNumber('')
+    //   })
+
+    // personsService.create(personObject).then(
+    //   response => {
+    //     setPersons(persons.concat(response.data))
+    //     setNewName('')
+    //     setNewNumber('')
+    //   }
+    // )
+
+
+    // const addObjectName = {
+    //   name: newName,
+    //   id: String(persons.length + 1),
+    //   number: newNumber
+    // }
+    // setPersons(persons.concat(addObjectName))
+    // setNewName('')
+  }
+
+  const deletePerson = (id) => {
+    personsService.deletePerson(id).then(
+      response => {
+        setPersons(persons.filter(
+          person => {
+            return person.id !== id
+          }
+        ))
+      }
+    )
   }
 
   return (
@@ -52,7 +136,8 @@ const App = (props) => {
       <h2>Numbers</h2>
         <div>
           <ul>
-            {persons.map((person) => <li key={person.id}>{person.name} {person.number}</li>)}
+            {persons.map((person) => <li key={person.id}>{person.name} {person.number} 
+              <button type='button' onClick={() => deletePerson(person.id)}>delete</button></li>)}
           </ul>
         </div>
     </div>
